@@ -1,16 +1,16 @@
 COMPILER = cc
 CFLAGS = -Wall -Wextra -Werror --pedantic
 
-NAME = libft.a
+NAME = minesweeper
 
-SRCS = main.c
+SRCS = srcs/main.c srcs/get_next_line.c
 
 OBJECTS = ${SRCS:.c=.o}
 
 all: ${NAME}
 
 ${NAME}: ${OBJECTS}
-	${COMPILER} ${CFLAGS} -c $^ -o $@ -I.
+	${COMPILER} ${CFLAGS} $^ -o $@ -I.
 
 %.o: %.c
 	${COMPILER} ${CFLAGS} -c $< -o $@ -I.
