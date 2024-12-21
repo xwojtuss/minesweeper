@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkornato <wkornato@student.42warsaw.p      +#+  +:+       +#+        */
+/*   By: wkornato <wkornato@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:13:37 by wkornato          #+#    #+#             */
-/*   Updated: 2024/04/02 21:13:39 by wkornato         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:49:28 by wkornato         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#define BUFFER_SIZE 32
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	length;
-	char	*string;
-
-	length = strlen(s1) + strlen(s2);
-	string = (char *)malloc((length + 1) * sizeof(char));
-	if (!string)
-		return (NULL);
-	while (*s1)
-	{
-		*string = *s1;
-		string++;
-		s1++;
-	}
-	while (*s2)
-	{
-		*string = *s2;
-		string++;
-		s2++;
-	}
-	*string = '\0';
-	return (string - length);
-}
+#include "get_next_line.h"
 
 char	*shift_buffer(char *static_buffer, int *i)
 {
@@ -78,7 +50,7 @@ char	*read_and_append(char *static_buffer, char *read_buffer, int fd)
 		if (!static_buffer)
 			static_buffer = calloc(1, sizeof(char));
 		temp = static_buffer;
-		static_buffer = strjoin(temp, read_buffer);
+		static_buffer = ft_strjoin(temp, read_buffer);
 		free(temp);
 		if (find_newline(read_buffer))
 			break ;
@@ -107,6 +79,13 @@ char	*set_result(char *static_buffer, int *i)
 	return (result);
 }
 
+/*
+Czyta fd linijka po linijce, nie ważne jaka gigantyczna jest linijka
+linijka zwracana ma na końcu \n jeżeli w pliku też na końcu miała \n
+czyli ostatnia linijka nie bedzie miala \n na koncu
+zwraca NULL gdy cos sie nie powiedzie lub gdy dotrze do konca pliku
+Napisana wczesniej, po prostu wykorzytujemy ja tutaj zamiast getline()
+*/
 char	*get_next_line(int fd)
 {
 	static char	*static_buffer;
