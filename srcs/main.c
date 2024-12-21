@@ -1,9 +1,3 @@
-
-
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-
 /*
 
 Komórka to short, gdzie najmniej znaczący bit oznacza:
@@ -12,50 +6,72 @@ Komórka to short, gdzie najmniej znaczący bit oznacza:
 Drugi najmniej znaczący bit oznacza:
 	1 - jest flaga
 	0 - nie ma flagi
-Trzeci, czwarty, piąty bit to informacja o tym ile jest bomb dookoła
+Trzeci najmniej znaczący bit oznacza:
+	1 - jest odkryta
+	0 - nie jest odkryta
+Czwarty, piąty, szósty bit to informacja o tym ile jest bomb dookoła
 
 */
 
-char	*get_next_line(int fd);
+#include "get_next_line.h"
+#include "minesweeper.h"
 
-short	**create_array(unsigned int rows, unsigned int cols)
+void	print_field(short **grid, int rows, int cols, bool is_finished)
 {
-	short	**result;
+	char *count_sumbols[9] = {"0️⃣ ", "1️⃣ ", "2️⃣ ", "3️⃣ ", "4️⃣ ", "5️⃣ ", "6️⃣ ", "7️⃣ ", "8️⃣ "};
 
-	result = (short **)calloc(sizeof(short *), cols);
-	if (!result)
-		exit(EXIT_FAILURE);
-	for (unsigned int i = 0; i < cols; i++)
+	for (int i = 0; i < cols; i++)
 	{
-		result[i] = (short *)calloc(sizeof(short), rows);
-		if (!result[i])
+		for (int j = 0; j < rows; j++)
 		{
-			for (int j = 0; j < i; j++)
-				free(result[i]);
-			free(result);
-			exit(EXIT_FAILURE);
+			if (is_finished && is_bomb(grid[i][j]) && is_flagged(grid[i][j]))
+				printf("💣");
+			else if (is_finished && is_bomb(grid[i][j]))
+				printf("💥");
+			else if ((is_revealed(grid[i][j]) || is_finished) && !is_flagged(grid[i][j]))
+				printf("%s", count_sumbols[grid[i][j] & COUNT]);
+			else if (!is_flagged(grid[i][j]))
+				printf("⬜");
+			else
+				printf("🚩");
 		}
-		result[i] = 0;
+		printf("\n");
 	}
-	return (result);
 }
 
-int main(void)
+int	main(int argc, char **argv)
 {
 	short	**grid;
 	char	*line;
+	int		fd;
 	int		cols;
 	int		rows;
 
+	if (argc > 1)
+		print_usage();
+	else if (argc == 1)
+		fd = STDIN_FILENO;
+	else
+		fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		err("Could not open file");
 	(void)grid;
 	cols = 9;
 	rows = 9;
 	grid = create_array(rows, cols);
-	line = get_next_line(STDIN_FILENO);
+	line = get_next_line(fd);
+	if (line && line[strlen(line) - 1] == '\n')
+		line[strlen(line) - 1] = '\0';
 	printf("%s\n", line);
-	//generate tiles
-
-	//start game
-
-	free_grid(grid);
+	free(line);
+	set_bomb(&grid[0][0]);
+	set_bomb(&grid[0][1]);
+	print_field(grid, rows, cols, false);
+	change_flag(&grid[0][0]);
+	// generate tiles
+	// start game
+	print_field(grid, rows, cols, false);
+	printf("after finished:\n");
+	print_field(grid, rows, cols, true);
+	free_grid(grid, cols);
 }
