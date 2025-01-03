@@ -1,25 +1,14 @@
-==33284== Memcheck, a memory error detector
-==33284== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==33284== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==33284== Command: ./minesweeper
-==33284== Parent PID: 5403
-==33284== 
-==33284== 
-==33284== HEAP SUMMARY:
-==33284==     in use at exit: 38 bytes in 1 blocks
-==33284==   total heap usage: 16 allocs, 15 frees, 1,455 bytes allocated
-==33284== 
-==33284== 38 bytes in 1 blocks are still reachable in loss record 1 of 1
-==33284==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33284==    by 0x109752: shift_buffer (get_next_line.c:24)
-==33284==    by 0x109AD4: get_next_line (get_next_line.c:109)
-==33284==    by 0x109607: main (main.c:62)
-==33284== 
-==33284== LEAK SUMMARY:
-==33284==    definitely lost: 0 bytes in 0 blocks
-==33284==    indirectly lost: 0 bytes in 0 blocks
-==33284==      possibly lost: 0 bytes in 0 blocks
-==33284==    still reachable: 38 bytes in 1 blocks
-==33284==         suppressed: 0 bytes in 0 blocks
-==33284== 
-==33284== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==37005== Memcheck, a memory error detector
+==37005== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==37005== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==37005== Command: ./minesweeper
+==37005== Parent PID: 35296
+==37005== 
+==37005== 
+==37005== HEAP SUMMARY:
+==37005==     in use at exit: 0 bytes in 0 blocks
+==37005==   total heap usage: 4 allocs, 4 frees, 2,060 bytes allocated
+==37005== 
+==37005== All heap blocks were freed -- no leaks are possible
+==37005== 
+==37005== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
