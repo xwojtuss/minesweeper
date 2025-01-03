@@ -39,31 +39,55 @@ void	print_field(short **grid, int rows, int cols, bool is_finished)
 	}
 }
 
+#include <getopt.h>
+
+FILE	*get_input(int argc, char **argv)
+{
+	int		option;
+	char	*filename;
+	FILE	*input;
+
+	filename = NULL;
+	input = stdin;
+	while((option = getopt(argc, argv, ":f:")) != -1)
+	{
+		switch(option)
+		{
+			case 'f':
+				if (filename)
+					err_usage("Too many files");
+				printf("Given File: %s\n", optarg);
+				filename = optarg;
+				break;
+			case ':':
+				printf("option needs a value\n");
+				break;
+			case '?':
+				printf("unknown option: %c\n", optopt);
+				break;
+		}
+	}
+	if (filename)
+		input = fopen(filename, "r");
+	return (input);
+}
+
 int	main(int argc, char **argv)
 {
 	short	**grid;
-	char	*line;
-	int		fd;
 	int		cols;
 	int		rows;
-
-	if (argc > 1)
-		print_usage();
-	else if (argc == 1)
-		fd = STDIN_FILENO;
-	else
-		fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
+	FILE	*input;
+	
+	input = get_input(argc, argv);
+	if (!input)
 		err("Could not open file");
+	if (input != stdin)
+		fclose(input);
 	(void)grid;
 	cols = 9;
 	rows = 9;
 	grid = create_array(rows, cols);
-	line = get_next_line(fd);
-	if (line && line[strlen(line) - 1] == '\n')
-		line[strlen(line) - 1] = '\0';
-	printf("%s\n", line);
-	free(line);
 	set_bomb(&grid[0][0]);
 	set_bomb(&grid[0][1]);
 	print_field(grid, rows, cols, false);
