@@ -28,6 +28,7 @@ bool	is_revealed(short info);
 bool	is_bomb(short info);
 
 // errors.c
+void	err_usage(char *message);
 void	err(char *message);
 void	print_usage(void);
 

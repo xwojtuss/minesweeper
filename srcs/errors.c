@@ -1,5 +1,12 @@
 #include "minesweeper.h"
 
+void	err_usage(char *message)
+{
+	fprintf(stderr, "Error\n%s\n", message);
+	print_usage();
+	exit(EXIT_FAILURE);
+}
+
 void	err(char *message)
 {
 	fprintf(stderr, "Error\n%s\n", message);
