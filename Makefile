@@ -1,15 +1,14 @@
 COMPILER = cc
-CFLAGS = -Wall -Wextra -Werror --pedantic -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = minesweeper
 
-SRCS = srcs/main.c srcs/get_next_line.c srcs/get_next_line_utils.c \
-	srcs/allocation.c srcs/errors.c srcs/get_set_type.c
+SRCS = srcs/main.c srcs/allocation.c srcs/errors.c srcs/get_set_type.c
 
 OBJECTS = ${SRCS:.c=.o}
 
 INCLUDE_FOLDER = includes
-INCLUDES = includes/minesweeper.h includes/get_next_line.h
+INCLUDES = includes/minesweeper.h
 
 all: ${NAME}
 

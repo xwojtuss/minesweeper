@@ -1,14 +1,14 @@
-==21997== Memcheck, a memory error detector
-==21997== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==21997== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==21997== Command: ./minesweeper -f Makefile
-==21997== Parent PID: 18794
-==21997== 
-==21997== 
-==21997== HEAP SUMMARY:
-==21997==     in use at exit: 0 bytes in 0 blocks
-==21997==   total heap usage: 12 allocs, 12 frees, 1,730 bytes allocated
-==21997== 
-==21997== All heap blocks were freed -- no leaks are possible
-==21997== 
-==21997== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==37005== Memcheck, a memory error detector
+==37005== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==37005== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==37005== Command: ./minesweeper
+==37005== Parent PID: 35296
+==37005== 
+==37005== 
+==37005== HEAP SUMMARY:
+==37005==     in use at exit: 0 bytes in 0 blocks
+==37005==   total heap usage: 4 allocs, 4 frees, 2,060 bytes allocated
+==37005== 
+==37005== All heap blocks were freed -- no leaks are possible
+==37005== 
+==37005== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
