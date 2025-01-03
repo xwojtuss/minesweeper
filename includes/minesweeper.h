@@ -4,8 +4,10 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <string.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <errno.h>
 
 # define BOMB (1 << BOMB_BIT)
 # define FLAGED (1 << FLAGED_BIT)
@@ -17,6 +19,10 @@
 # define REVEALED_BIT 2
 # define COUNT_START_BIT 3
 # define COUNT_END_BIT 4
+
+# define BUFFER_SIZE 64
+# define COLOR_BOLD  "\e[1m"
+# define COLOR_OFF   "\e[m"
 
 // do uporzadkowania:
 
@@ -31,6 +37,8 @@ bool	is_bomb(short info);
 void	err_usage(char *message);
 void	err(char *message);
 void	print_usage(void);
+void	err_close_perror(char *message, FILE *to_close);
+void	err_close(char *message, FILE *to_close);
 
 // allocation.c:
 
