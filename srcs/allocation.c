@@ -6,7 +6,7 @@ short	**create_array(unsigned int rows, unsigned int cols)
 
 	result = (short **)calloc(sizeof(short *), cols);
 	if (!result)
-		err("Memory allocation failure");
+		return (NULL);
 	for (unsigned int i = 0; i < cols; i++)
 	{
 		result[i] = (short *)calloc(sizeof(short), rows);
@@ -15,7 +15,7 @@ short	**create_array(unsigned int rows, unsigned int cols)
 			for (unsigned int j = 0; j < i; j++)
 				free(result[i]);
 			free(result);
-			err("Memory allocation failure");
+			return (NULL);
 		}
 	}
 	return (result);
