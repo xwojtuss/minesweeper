@@ -37,6 +37,7 @@ bool	is_bomb(short info);
 void	err_usage(char *message);
 void	err(char *message);
 void	print_usage(void);
+void	err_close_free(char *message, FILE *to_close, short **grid, int cols);
 void	err_close_perror(char *message, FILE *to_close);
 void	err_close(char *message, FILE *to_close);
 
