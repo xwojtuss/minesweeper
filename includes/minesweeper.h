@@ -8,6 +8,7 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <time.h>
 
 # define BOMB (1 << BOMB_BIT)
 # define FLAGED (1 << FLAGED_BIT)
@@ -18,7 +19,7 @@
 # define FLAGED_BIT 1
 # define REVEALED_BIT 2
 # define COUNT_START_BIT 3
-# define COUNT_END_BIT 4
+# define COUNT_END_BIT 5
 
 # define BUFFER_SIZE 64
 # define COLOR_BOLD  "\e[1m"

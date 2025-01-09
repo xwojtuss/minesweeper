@@ -142,8 +142,26 @@ void	print_diff_levels(void)
 	printf(COLOR_BOLD "4." COLOR_OFF "\tWłasna plansza\n");
 }
 
-int	main(int argc, char **argv)
+void	place_bomb(short **grid, int rows, int cols, int mines)
 {
+	srand(time(NULL));
+	int mine_c = 0;
+	int rand_r, rand_c;
+	printf("in\n");
+	while (mine_c!=mines)
+	{
+		rand_r=rand()%rows;
+		rand_c=rand()%cols;
+		if (!is_bomb(grid[rand_c][rand_r]))
+		{
+			set_bomb(&grid[rand_c][rand_r]);
+			mine_c++;
+		}
+	}	
+}
+
+int	main(int argc, char **argv)
+{	
 	short	**grid;
 	int		cols;
 	int		rows;
@@ -162,11 +180,13 @@ int	main(int argc, char **argv)
 	if (!grid)
 		err_close("Alokacja pamięci nie powiodła się", input);
 	if (mines == 0)
+	{
+
+	}
 		// mines = load_map(input, cols, rows, grid); //buffer for fgets will be cols * 2
 	// else
-		// generate_map();
-	set_bomb(&grid[0][0]);
-	set_bomb(&grid[0][1]);
+		// generate_map();	
+	place_bomb(grid, rows, cols, mines);
 	print_field(grid, rows, cols, false);
 	change_flag(&grid[0][0]);
 	// start game
