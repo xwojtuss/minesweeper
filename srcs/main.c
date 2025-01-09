@@ -73,13 +73,13 @@ FILE	*get_input(int argc, char **argv)
 	return (input);
 }
 
-bool	is_valid(char *token)
+bool	is_valid(char *token, char from, char to)
 {
 	for (int i = 0; token[i]; i++)
 	{
 		if (token[i] == '\n' && token[i + 1] == '\0')
 			return (true);
-		if (token[i] < '0' || token[i] > '9')
+		if (token[i] < from || token[i] > to)
 			return (false);
 	}
 	return (true);
@@ -90,16 +90,16 @@ void	get_x_y(FILE *input, int *x, int *y, char buffer[BUFFER_SIZE])
 	char	*line;
 	char	*token;
 
-	printf("Podaj rozmiar własnej mapy: ");
+	printf("Podaj rozmiar własnej mapy (wiersze kolumny): ");
 	line = fgets(buffer, BUFFER_SIZE, input);
 	if (!line)
 		err_close_perror("Nie udało się przeczytać linijki", input);
 	token = strtok(line, " ");
-	if (!token || !is_valid(token))
+	if (!token || !is_valid(token, '0', '9'))
 		err_close("Błędny rozmiar mapy", input);
 	*x = atoi(token);
 	token = strtok(NULL, " ");
-	if (!token || !is_valid(token))
+	if (!token || !is_valid(token, '0', '9'))
 		err_close("Błędny rozmiar mapy", input);
 	*y = atoi(token);
 	if (*x <= 0 || *y <= 0)
@@ -109,7 +109,7 @@ void	get_x_y(FILE *input, int *x, int *y, char buffer[BUFFER_SIZE])
 		err_close("Za dużo parametrów", input);
 }
 
-void	get_size(FILE *input, int *x, int *y, int *mines)
+int	get_size(FILE *input, int *x, int *y, int *mines)
 {
 	char	buffer[BUFFER_SIZE];
 	char	*line;
@@ -119,15 +119,15 @@ void	get_size(FILE *input, int *x, int *y, int *mines)
 	if (!line)
 		err_close_perror("Błąd podczas czytania z pliku", input);
 	if (line[0] == '1' && (line[1] == '\n' || line[1] == '\0'))
-		*x = 9, *y = 9, *mines = 10;
+		return (*x = 9, *y = 9, *mines = 10, 1);
 	else if (line[0] == '2' && (line[1] == '\n' || line[1] == '\0'))
-		*x = 16, *y = 16, *mines = 40;
+		return (*x = 16, *y = 16, *mines = 40, 2);
 	else if (line[0] == '3' && (line[1] == '\n' || line[1] == '\0'))
-		*x = 16, *y = 30, *mines = 99;
+		return (*x = 16, *y = 30, *mines = 99, 3);
 	else if (line[0] == '4' && (line[1] == '\n' || line[1] == '\0'))
 	{
 		get_x_y(input, x, y, buffer);
-		*mines = 0;
+		return (*mines = 0, 1);
 	}
 	else
 		err_close("Zły poziom trudności", input);
@@ -142,8 +142,38 @@ void	print_diff_levels(void)
 	printf(COLOR_BOLD "4." COLOR_OFF "\tWłasna plansza\n");
 }
 
+
+int	load_map(FILE *input, int x, int y, short **grid)
+{
+	char	*buffer;
+	char	*line;
+
+	buffer = (char *)calloc(y + 2, sizeof(char));
+	if (!buffer)
+		err_close_free("Alokacja pamięci nie powiodła się", input, grid, x);
+	for (int i = 0; i < x; i++)
+	{
+		line = fgets(buffer, y + 2, input);
+		if (line[y] != '\n' || !is_valid(line, '0', '1'))
+		{
+			free(buffer);
+			err_close_free("Zły format mapy", input, grid, x);
+		}
+		else
+		{
+			for (int j = 0; j < y; j++)
+				if (line[j] == '1')
+					set_bomb(&grid[i][j]);
+		}
+	}
+	free(buffer);
+	return (0);
+}
+
+
 void	place_bomb(short **grid, int rows, int cols, int mines)
 {
+
 	srand(time(NULL));
 	int mine_c = 0;
 	int rand_r, rand_c;
@@ -165,6 +195,7 @@ int	main(int argc, char **argv)
 	short	**grid;
 	int		cols;
 	int		rows;
+	int		difficulty;
 	int		mines;
 	FILE	*input;
 	
@@ -175,7 +206,7 @@ int	main(int argc, char **argv)
 	cols = 0;
 	rows = 0;
 	print_diff_levels();
-	get_size(input, &cols, &rows, &mines);
+	difficulty = get_size(input, &cols, &rows, &mines);
 	grid = create_array(rows, cols);
 	if (!grid)
 		err_close("Alokacja pamięci nie powiodła się", input);
