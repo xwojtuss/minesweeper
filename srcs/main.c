@@ -132,8 +132,8 @@ int	get_size(FILE *input, int *x, int *y, int *mines)
 	else
 	{
 		err_close("Zły poziom trudności", input);
-		return 0;
 	}
+	return (0);
 }
 
 void	print_diff_levels(void)
@@ -415,6 +415,39 @@ void reveal_grid(short **grid, int r, int c, int rows, int cols)
 
 }
 
+void	start_game(FILE *input, short **grid, int rows, int cols)
+{
+	char	line[42];
+	char	command;
+	int		x;
+	int		y;
+
+	while (true)
+	{
+		bzero(line, 42);
+		print_field(grid, rows, cols, false);
+		printf("> ");
+		fgets(line, 42, input);
+		if (!strchr(line, '\n') || sscanf(line, "%c %i %i", &command, &x, &y) < 3 || (command != 'r' && command != 'f'))
+		{
+			printf("Zła komenda, proszę podać następną\n");
+			// continue ;
+			break ; //temporary
+		}
+		if (x >= rows || x < 0 || y >= cols || y < 0)
+		{
+			printf("x lub/i y poza granicami mapy\n");
+			continue ;
+		}
+		if (command == 'f')
+			change_flag(&grid[x][y]);
+		else if (command == 'r' && !is_flagged(grid[x][y]))
+			reveal(&grid[x][y]);
+		// if all bombs flagged or bomb revealed
+			// break
+	}
+}
+
 int	main(int argc, char **argv)
 {	
 	short	**grid;
@@ -446,8 +479,7 @@ int	main(int argc, char **argv)
 	place_bomb(grid, rows, cols, mines);
 	print_field(grid, rows, cols, false);
 	change_flag(&grid[0][0]);
-	// start game
-	print_field(grid, rows, cols, false);
+	start_game(input, grid, rows, cols);
 	reveal_grid(grid,1,1,rows,cols);
 	reveal_grid(grid,7,7,rows,cols);
 	print_field(grid,rows,cols,false);
