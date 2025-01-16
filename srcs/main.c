@@ -131,6 +131,7 @@ int	get_size(FILE *input, int *x, int *y, int *mines)
 	}
 	else
 		err_close("Zły poziom trudności", input);
+	return (0);
 }
 
 void	print_diff_levels(void)
@@ -169,6 +170,39 @@ int	load_map(FILE *input, int x, int y, short **grid)
 	return (0);
 }
 
+void	start_game(FILE *input, short **grid, int rows, int cols)
+{
+	char	line[42];
+	char	command;
+	int		x;
+	int		y;
+
+	while (true)
+	{
+		bzero(line, 42);
+		print_field(grid, rows, cols, false);
+		printf("> ");
+		fgets(line, 42, input);
+		if (!strchr(line, '\n') || sscanf(line, "%c %i %i", &command, &x, &y) < 3 || (command != 'r' && command != 'f'))
+		{
+			printf("Zła komenda, proszę podać następną\n");
+			// continue ;
+			break ; //temporary
+		}
+		if (x >= rows || x < 0 || y >= cols || y < 0)
+		{
+			printf("x lub/i y poza granicami mapy\n");
+			continue ;
+		}
+		if (command == 'f')
+			change_flag(&grid[x][y]);
+		else if (command == 'r' && !is_flagged(grid[x][y]))
+			reveal(&grid[x][y]);
+		// if all bombs flagged or bomb revealed
+			// break
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	short	**grid;
@@ -193,8 +227,7 @@ int	main(int argc, char **argv)
 		mines = load_map(input, cols, rows, grid);
 	// else
 		// generate_map();
-	// start game
-	print_field(grid, rows, cols, false);
+	start_game(input, grid, rows, cols);
 	printf("after finished:\n");
 	print_field(grid, rows, cols, true);
 	free_grid(grid, cols);
