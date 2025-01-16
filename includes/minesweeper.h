@@ -5,6 +5,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <string.h>
+# include <strings.h>
 # include <fcntl.h>
 # include <stdbool.h>
 # include <errno.h>
@@ -27,6 +28,7 @@
 // do uporzadkowania:
 
 // get_set_type.c
+void	reveal(short *info);
 void	change_flag(short *info);
 void	set_bomb(short *info);
 bool	is_flagged(short info);
