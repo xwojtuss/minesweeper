@@ -17,6 +17,11 @@ void	add_count(short *info)
 	*info += (1 << COUNT_START_BIT);
 }
 
+void	reveal(short *info)
+{
+	*info |= REVEALED;
+}
+
 bool	is_revealed(short info)
 {
 	return ((info & REVEALED) / REVEALED);
