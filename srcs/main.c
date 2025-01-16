@@ -289,6 +289,132 @@ void	place_bomb(short **grid, int rows, int cols, int mines)
 	}
 }
 
+
+void reveal_ogrid(short **grid, int r, int c, int rows, int cols)
+{
+	if(is_flagged(grid[c][r]))
+	{
+		return;
+	}
+	else if(is_revealed(grid[c][r]))
+	{
+		return;
+	}
+	else
+	{
+		reveal(&grid[c][r]);
+		if((grid[c][r] & COUNT)>>COUNT_START_BIT==0)
+		{
+			if(c>0)
+			{
+				reveal_ogrid(grid, r, c-1, rows, cols);
+				if(r>0)
+				{
+					reveal_ogrid(grid, r-1, c-1, rows, cols);
+				}
+				if(r<rows-1)
+				{
+					reveal_ogrid(grid, r+1, c-1, rows, cols);
+				}
+			}
+			if(r>0)
+			{
+				reveal_ogrid(grid, r-1, c, rows, cols);
+			}
+			if(r<rows-1)
+			{
+				reveal_ogrid(grid, r+1, c, rows, cols);
+			}
+			if(c<cols-1)
+			{
+				reveal_ogrid(grid, r, c+1, rows, cols);
+				if(r>0)
+				{
+					reveal_ogrid(grid, r-1, c+1, rows, cols);
+				}
+				if(r<rows-1)
+				{
+					reveal_ogrid(grid, r+1, c+1, rows, cols);
+				}
+			}
+		}
+	}
+
+
+}
+
+
+
+void reveal_grid(short **grid, int r, int c, int rows, int cols)
+{
+	if(r<0 || r>=rows)
+	{
+		printf("niepoprawna wartosc kolumny: %d\n",r);
+		return;
+	}
+	else if(c<0 || c>=cols)
+	{
+		printf("niepoprawna wartosc wiersza: %d\n",c);
+		return;
+	}
+	else if(is_flagged(grid[c][r]))
+	{
+		printf("pole posiada flage!\n");
+		return;
+	}
+	else if(is_bomb(grid[c][r]))
+	{
+		// add failure
+		return;
+	}
+	else if(is_revealed(grid[c][r]))
+	{
+		printf("pole jest juz odkryte!\n");
+		return;
+	}
+	else
+	{
+		reveal(&grid[c][r]);
+		if((grid[c][r] & COUNT)>>COUNT_START_BIT==0)
+		{
+			if(c>0)
+			{
+				reveal_ogrid(grid, r, c-1, rows, cols);
+				if(r>0)
+				{
+					reveal_ogrid(grid, r-1, c-1, rows, cols);
+				}
+				if(r<rows-1)
+				{
+					reveal_ogrid(grid, r+1, c-1, rows, cols);
+				}
+			}
+			if(r>0)
+			{
+				reveal_ogrid(grid, r-1, c, rows, cols);
+			}
+			if(r<rows-1)
+			{
+				reveal_ogrid(grid, r+1, c, rows, cols);
+			}
+			if(c<cols-1)
+			{
+				reveal_ogrid(grid, r, c+1, rows, cols);
+				if(r>0)
+				{
+					reveal_ogrid(grid, r-1, c+1, rows, cols);
+				}
+				if(r<rows-1)
+				{
+					reveal_ogrid(grid, r+1, c+1, rows, cols);
+				}
+			}
+		}
+	}
+
+
+}
+
 int	main(int argc, char **argv)
 {	
 	short	**grid;
@@ -322,6 +448,11 @@ int	main(int argc, char **argv)
 	change_flag(&grid[0][0]);
 	// start game
 	print_field(grid, rows, cols, false);
+	reveal_grid(grid,1,1,rows,cols);
+	reveal_grid(grid,7,7,rows,cols);
+	print_field(grid,rows,cols,false);
+	reveal_grid(grid,0,9,rows,cols);
+	print_field(grid,rows,cols,false);
 	printf("after finished:\n");
 	print_field(grid, rows, cols, true);
 	free_grid(grid, cols);
