@@ -1,5 +1,11 @@
 #include "minesweeper.h"
 
+// will not flip
+void	reveal(short *info)
+{
+	*info |= REVEALED;
+}
+
 // can flip the flag
 void	change_flag(short *info)
 {
