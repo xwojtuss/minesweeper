@@ -12,6 +12,11 @@ void	set_bomb(short *info)
 	*info |= BOMB;
 }
 
+void	add_count(short *info)
+{
+	*info += (1 << COUNT_START_BIT);
+}
+
 bool	is_revealed(short info)
 {
 	return ((info & REVEALED) / REVEALED);

@@ -30,6 +30,7 @@
 // get_set_type.c
 void	change_flag(short *info);
 void	set_bomb(short *info);
+void	add_count(short *info);
 bool	is_flagged(short info);
 bool	is_revealed(short info);
 bool	is_bomb(short info);

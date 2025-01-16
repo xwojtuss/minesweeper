@@ -28,7 +28,7 @@ void	print_field(short **grid, int rows, int cols, bool is_finished)
 			else if (is_finished && is_bomb(grid[i][j]))
 				printf("💥");
 			else if ((is_revealed(grid[i][j]) || is_finished) && !is_flagged(grid[i][j]))
-				printf("%s", count_sumbols[grid[i][j] & COUNT]);
+				printf("%s", count_sumbols[(grid[i][j] & COUNT)>>COUNT_START_BIT]);
 			else if (!is_flagged(grid[i][j]))
 				printf("⬜");
 			else
@@ -130,7 +130,10 @@ int	get_size(FILE *input, int *x, int *y, int *mines)
 		return (*mines = 0, 1);
 	}
 	else
+	{
 		err_close("Zły poziom trudności", input);
+		return 0;
+	}
 }
 
 void	print_diff_levels(void)
@@ -170,6 +173,67 @@ int	load_map(FILE *input, int x, int y, short **grid)
 	return (0);
 }
 
+bool	bomb_check(short **grid, int r, int c, int rows, int cols)
+{
+	if(c>0)
+	{
+		if((grid[c-1][r] & COUNT)>>COUNT_START_BIT>3)
+		{
+			return 1;
+		}
+		if(r>0)
+		{
+			if((grid[c-1][r-1] & COUNT)>>COUNT_START_BIT>3)
+			{
+				return 1;
+			}
+		}
+		if(r<rows-1)
+		{
+			if((grid[c-1][r+1] & COUNT)>>COUNT_START_BIT>3)
+			{
+				return 1;
+			}
+		}
+	}
+	if(r>0)
+	{
+		if((grid[c][r-1] & COUNT)>>COUNT_START_BIT>3)
+			{
+				return 1;
+			}
+	}
+	if(r<rows-1)
+	{
+		if((grid[c][r+1] & COUNT)>>COUNT_START_BIT>3)
+			{
+				return 1;
+			}
+	}
+	if(c<cols-1)
+	{
+		if(r>0)
+		{
+			if((grid[c+1][r-1] & COUNT)>>COUNT_START_BIT>3)
+				{
+					return 1;
+				}
+		}
+		if(r<rows-1)
+		{
+			if((grid[c+1][r+1] & COUNT)>>COUNT_START_BIT>3)
+				{
+					return 1;
+				}
+		}
+		if((grid[c+1][r] & COUNT)>>COUNT_START_BIT>3)
+			{
+				return 1;
+			}
+	}
+
+return 0;
+}
 
 void	place_bomb(short **grid, int rows, int cols, int mines)
 {
@@ -184,10 +248,45 @@ void	place_bomb(short **grid, int rows, int cols, int mines)
 		rand_c=rand()%cols;
 		if (!is_bomb(grid[rand_c][rand_r]))
 		{
-			set_bomb(&grid[rand_c][rand_r]);
-			mine_c++;
+			if(bomb_check(grid, rand_r, rand_c, rows, cols)==0)
+			{
+				set_bomb(&grid[rand_c][rand_r]);
+				mine_c++;
+				if(rand_c>0)
+				{
+					add_count(&grid[rand_c-1][rand_r]);
+					if(rand_r>0)
+					{
+					add_count(&grid[rand_c-1][rand_r-1]);
+					}
+					if(rand_r<rows-1)
+					{
+					add_count(&grid[rand_c-1][rand_r+1]);
+					}
+				}
+				if(rand_r>0)
+				{
+				add_count(&grid[rand_c][rand_r-1]);
+				}
+				if(rand_r<rows-1)
+				{
+				add_count(&grid[rand_c][rand_r+1]);
+				}
+				if(rand_c<cols-1)
+				{
+					if(rand_r>0)
+					{
+					add_count(&grid[rand_c+1][rand_r-1]);
+					}
+					if(rand_r<rows-1)
+					{
+					add_count(&grid[rand_c+1][rand_r+1]);
+					}
+					add_count(&grid[rand_c+1][rand_r]);
+				}
+			}
 		}
-	}	
+	}
 }
 
 int	main(int argc, char **argv)
@@ -207,6 +306,7 @@ int	main(int argc, char **argv)
 	rows = 0;
 	print_diff_levels();
 	difficulty = get_size(input, &cols, &rows, &mines);
+	printf("%d\n", difficulty);
 	grid = create_array(rows, cols);
 	if (!grid)
 		err_close("Alokacja pamięci nie powiodła się", input);
