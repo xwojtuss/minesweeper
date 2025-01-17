@@ -21,7 +21,7 @@ void	err_close(char *message, FILE *to_close)
 	exit(EXIT_FAILURE);
 }
 
-void	err_close_free(char *message, FILE *to_close, short **grid, int cols)
+void	err_close_free(char *message, FILE *to_close, char **grid, int cols)
 {
 	fprintf(stderr, "Błąd\n%s\n", message);
 	if (grid)
