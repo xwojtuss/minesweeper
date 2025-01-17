@@ -63,8 +63,7 @@ void	place_bombs(char **grid, t_game_info *info, int r, int c)
 	{
 		rand_r = rand() % info->rows;
 		rand_c = rand() % info->cols;
-		if (is_bomb(grid[rand_c][rand_r]) || bomb_check(grid, rand_r, rand_c,
-				info) != 0 || rand_r == r || rand_c == c)
+		if (is_bomb(grid[rand_c][rand_r]) || bomb_check(grid, rand_r, rand_c, info) != 0 || (rand_r <= r+1 && rand_c <= c+1 && rand_r >=r-1 && rand_c >= c-1))
 			continue ;
 		set_bomb(&grid[rand_c][rand_r]);
 		mine_c++;
