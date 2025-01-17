@@ -39,7 +39,7 @@ typedef struct s_player
 
 typedef struct s_game_info
 {
-	char	difficulty;
+	char		difficulty;
 	int		cols;
 	int		rows;
 	int		mines;
@@ -65,7 +65,7 @@ void		err_close(char *message, FILE *to_close);
 // generate_map.c
 
 bool		bomb_check(char **grid, int r, int c, t_game_info *info);
-void		place_bomb(char **grid, t_game_info *info);
+void		place_bomb(char **grid, t_game_info *info, int r, int c);
 void		add_count_surround(char **grid, int r, int c, t_game_info *info);
 
 // get_set_type.c

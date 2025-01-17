@@ -51,7 +51,7 @@ void	add_count_surround(char **grid, int r, int c, t_game_info *info)
 	}
 }
 
-void	place_bomb(char **grid, t_game_info *info)
+void	place_bomb(char **grid, t_game_info *info, int r, int c)
 {
 	int mine_c = 0;
 	int rand_r, rand_c;
@@ -59,7 +59,7 @@ void	place_bomb(char **grid, t_game_info *info)
 	{
 		rand_r = rand() % info->rows;
 		rand_c = rand() % info->cols;
-		if (is_bomb(grid[rand_c][rand_r]) || bomb_check(grid, rand_r, rand_c, info) != 0)
+		if (is_bomb(grid[rand_c][rand_r]) || bomb_check(grid, rand_r, rand_c, info) != 0 || rand_r != r || rand_c !=c)
 			continue;
 		set_bomb(&grid[rand_c][rand_r]);
 		mine_c++;
