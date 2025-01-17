@@ -79,6 +79,37 @@ void	init_info(t_game_info *info)
 	info->rows = 0;
 }
 
+void first_move(FILE *input, char **grid, t_game_info *info)
+{
+	char	line[42];
+	char	command;
+	int		r;
+	int		c;
+	system("clear");
+	while(info->points == 0)
+	{
+		bzero(line, 42);
+		print_score(info);
+		print_field(grid, info->rows, info->cols, false);
+		printf("> ");
+		fgets(line, 42, input);
+		system("clear");
+		if (line[0] == '\0')
+			break ;
+		if (sscanf(line, "%c %i %i", &command, &r, &c) < 3 || command!= 'r')
+		{
+			printf("Zła komenda, proszę podać następną\n");
+			continue ;
+		}
+		if (r >= info->rows || r < 0 || c >= info->cols || c < 0)
+		{
+			printf("x lub/i y poza granicami mapy\n");
+			continue ;
+		}
+		place_bomb(grid, info, r, c);
+		info->points += reveal_grid(grid, r, c, info) * info->difficulty;
+	}
+}
 int	main(int argc, char **argv)
 {	
 	char	**grid;
@@ -98,7 +129,9 @@ int	main(int argc, char **argv)
 	if (info.mines == 0)
 		info.mines = load_map(input, grid, &info);
 	else
-		place_bomb(grid, &info);// has to take the first instruction into consideration
+	{
+		first_move(input, grid, &info);	
+	}
 	if (start_game(input, grid, &info))
 	{
 		print_end_game(grid, &info, true);
