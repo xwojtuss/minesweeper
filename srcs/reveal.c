@@ -38,7 +38,6 @@ int	reveal_grid(char **grid, int r, int c, t_game_info *info)
 		return(revealed);
 	reveal(&grid[c][r]);
 	revealed++;
-	printf("%i",revealed);
 	if((grid[c][r] & COUNT)>>COUNT_START_BIT!=0)
 		return(revealed);
 	if (c > 0)
