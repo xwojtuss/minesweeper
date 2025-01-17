@@ -1,15 +1,15 @@
 #include "minesweeper.h"
 
-short	**create_array(unsigned int rows, unsigned int cols)
+char	**create_array(unsigned int cols, unsigned int rows)
 {
-	short	**result;
+	char	**result;
 
-	result = (short **)calloc(sizeof(short *), cols);
+	result = (char **)calloc(sizeof(char *), cols);
 	if (!result)
 		return (NULL);
 	for (unsigned int i = 0; i < cols; i++)
 	{
-		result[i] = (short *)calloc(sizeof(short), rows);
+		result[i] = (char *)calloc(sizeof(char), rows);
 		if (!result[i])
 		{
 			for (unsigned int j = 0; j < i; j++)
@@ -21,7 +21,7 @@ short	**create_array(unsigned int rows, unsigned int cols)
 	return (result);
 }
 
-void	free_grid(short **grid, int cols)
+void	free_grid(char **grid, int cols)
 {
 	for (int i = 0; i < cols; i++)
 		free(grid[i]);

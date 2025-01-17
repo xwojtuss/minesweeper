@@ -1,15 +1,16 @@
 #ifndef MINESWEEPER_H
 # define MINESWEEPER_H
 
-# include <stdlib.h>
-# include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <getopt.h>
+# include <stdbool.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
 # include <strings.h>
-# include <fcntl.h>
-# include <stdbool.h>
-# include <errno.h>
 # include <time.h>
+# include <unistd.h>
 
 # define BOMB (1 << BOMB_BIT)
 # define FLAGED (1 << FLAGED_BIT)
@@ -23,32 +24,79 @@
 # define COUNT_END_BIT 5
 
 # define BUFFER_SIZE 64
-# define COLOR_BOLD  "\e[1m"
-# define COLOR_OFF   "\e[m"
+# define COLOR_BOLD "\e[1m"
+# define COLOR_OFF "\e[m"
 
-// do uporzadkowania:
+# define MAX_PLAYERS 100
+# define MAX_NAME_LEN 128
+# define LEADERBOARD_FILE ".leaderboard"
 
-// get_set_type.c
-void	reveal(short *info);
-void	change_flag(short *info);
-void	set_bomb(short *info);
-void	add_count(short *info);
-void	reveal(short *info);
-bool	is_flagged(short info);
-bool	is_revealed(short info);
-bool	is_bomb(short info);
+typedef struct s_player
+{
+	char	name[MAX_NAME_LEN];
+	int		points;
+}			t_player;
 
-// errors.c
-void	err_usage(char *message);
-void	err(char *message);
-void	print_usage(void);
-void	err_close_free(char *message, FILE *to_close, short **grid, int cols);
-void	err_close_perror(char *message, FILE *to_close);
-void	err_close(char *message, FILE *to_close);
+typedef struct s_game_info
+{
+	char	difficulty;
+	int		cols;
+	int		rows;
+	int		mines;
+	int		instructions;
+	int		points;
+}			t_game_info;
 
 // allocation.c:
 
-void	free_grid(short **grid, int cols);
-short	**create_array(unsigned int rows, unsigned int cols);
+void		free_grid(char **grid, int cols);
+char		**create_array(unsigned int cols, unsigned int rows);
+
+// errors.c
+
+void		err_usage(char *message);
+void		err(char *message);
+void		print_usage(void);
+void		err_close_free(char *message, FILE *to_close, char **grid,
+				int cols);
+void		err_close_perror(char *message, FILE *to_close);
+void		err_close(char *message, FILE *to_close);
+
+// generate_map.c
+
+bool		bomb_check(char **grid, int r, int c, t_game_info *info);
+void		place_bomb(char **grid, t_game_info *info);
+void		add_count_surround(char **grid, int r, int c, t_game_info *info);
+
+// get_set_type.c
+
+void		reveal(char *info);
+void		change_flag(char *info);
+void		set_bomb(char *info);
+void		add_count(char *info);
+void		reveal(char *info);
+bool		is_flagged(char info);
+bool		is_revealed(char info);
+bool		is_bomb(char info);
+
+// parsing.c
+
+void		get_leaderboard(t_game_info *info, FILE *input);
+FILE		*get_input(int argc, char **argv);
+bool		is_valid(char *token, char from, char to);
+void		get_x_y(FILE *input, char buffer[BUFFER_SIZE], t_game_info *info);
+int			get_size(FILE *input, t_game_info *info);
+int			load_map(FILE *input, char **grid, t_game_info *info);
+
+// print.c
+
+void		print_score(t_game_info *info);
+void		print_end_game(char **grid, t_game_info *info, bool is_success);
+void		print_diff_levels(void);
+void		print_field(char **grid, int rows, int cols, bool is_finished);
+
+// reveal.c
+
+int			reveal_grid(char **grid, int r, int c, t_game_info *info);
 
 #endif /* MINESWEEPER_H */
