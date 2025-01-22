@@ -27,7 +27,7 @@ ${NAME}: ${OBJECTS}
 %.o: %.c ${INCLUDES}
 	${COMPILER} ${CFLAGS} -c $< -o $@ -I${INCLUDE_FOLDER}
 
-test: all
+test_f_option:
 	@echo -e "\033[1mUruchamianie testów negatywnych z opcją -f:\033[0m"
 	@for MAP in ${INVALID_MAPS}; do \
 		echo -e "\nTestowanie map: $$MAP"; \
@@ -62,6 +62,7 @@ test: all
 		fi; \
 	done
 
+test_stdin:
 	@echo -e "\033[1mUruchamianie testów negatywnych jako stdin:\033[0m"
 	@for MAP in ${INVALID_MAPS}; do \
 		echo -e "\nTestowanie map: $$MAP"; \
@@ -95,6 +96,9 @@ test: all
 			read -n 1 -s; \
 		fi; \
 	done
+
+test: all test_f_option test_stdin
+	@echo -e "\033[1;32mTesty przebiegły pomyślnie!!!\033[0m"
 
 clean:
 	rm -f ${OBJECTS}
