@@ -53,7 +53,7 @@ void	add_count_surround(char **grid, int r, int c, t_game_info *info)
 	}
 }
 
-void	place_bomb(char **grid, t_game_info *info, int r, int c)
+void	place_bombs(char **grid, t_game_info *info, int r, int c)
 {
 	int	mine_c;
 
