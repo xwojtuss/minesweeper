@@ -31,6 +31,8 @@
 # define MAX_NAME_LEN 128
 # define LEADERBOARD_FILE ".leaderboard"
 
+# define BIN_NAME "minesweeper"
+
 /*
 
 Komórka to char, gdzie najmniej znaczący bit oznacza:

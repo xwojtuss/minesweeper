@@ -45,6 +45,8 @@ void	err_close_perror(char *message, FILE *to_close)
 
 void	print_usage(void)
 {
-	printf("tutaj trzeba opisac\n"); // DOKONCZYC!!!!!!!!!!
+	printf("Wywołanie:\n./%s\n", BIN_NAME);
+	printf("Opcje:\n-f\tczytanie z pliku:\n");
+	printf("\t./%s [ścieżka_do_pliku]\n", BIN_NAME);
 	exit(EXIT_FAILURE);
 }
