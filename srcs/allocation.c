@@ -1,5 +1,15 @@
 #include "minesweeper.h"
 
+void	init_info(t_game_info *info)
+{
+	info->cols = 0;
+	info->difficulty = 0;
+	info->instructions = 0;
+	info->mines = 0;
+	info->points = 0;
+	info->rows = 0;
+}
+
 char	**create_array(unsigned int cols, unsigned int rows)
 {
 	char	**result;

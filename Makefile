@@ -3,9 +3,10 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = minesweeper
 
-SRCS = srcs/main.c srcs/allocation.c srcs/errors.c \
-		srcs/get_set_type.c srcs/print.c srcs/generate_map.c \
-		srcs/parsing.c srcs/reveal.c
+SRCS = srcs/main.c srcs/allocation.c srcs/errors.c srcs/generate_map.c \
+		srcs/print.c srcs/leaderboard.c srcs/start_game.c \
+		srcs/parsing.c srcs/reveal.c \
+		srcs/get_type.c srcs/set_type.c
 
 OBJECTS = ${SRCS:.c=.o}
 

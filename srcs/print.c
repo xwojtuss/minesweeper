@@ -7,7 +7,8 @@ void	print_score(t_game_info *info)
 
 void	print_field(char **grid, int rows, int cols, bool is_finished)
 {
-	char *count_sumbols[9] = {"0️⃣ ", "1️⃣ ", "2️⃣ ", "3️⃣ ", "4️⃣ ", "5️⃣ ", "6️⃣ ", "7️⃣ ", "8️⃣ "};
+	char	*count_sumbols[9] = {"0️⃣ ", "1️⃣ ", "2️⃣ ", "3️⃣ ", "4️⃣ ", "5️⃣ ",
+			"6️⃣ ", "7️⃣ ", "8️⃣ "};
 
 	for (int i = 0; i < rows; i++)
 	{
@@ -17,8 +18,10 @@ void	print_field(char **grid, int rows, int cols, bool is_finished)
 				printf("💣");
 			else if (is_finished && is_bomb(grid[j][i]))
 				printf("💥");
-			else if ((is_revealed(grid[j][i]) || is_finished) && !is_flagged(grid[j][i]))
-				printf("%s", count_sumbols[(grid[j][i] & COUNT)>>COUNT_START_BIT]);
+			else if ((is_revealed(grid[j][i]) || is_finished)
+				&& !is_flagged(grid[j][i]))
+				printf("%s",
+					count_sumbols[(grid[j][i] & COUNT) >> COUNT_START_BIT]);
 			else if (!is_flagged(grid[j][i]))
 				printf("⬜");
 			else
