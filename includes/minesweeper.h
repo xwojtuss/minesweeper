@@ -31,6 +31,21 @@
 # define MAX_NAME_LEN 128
 # define LEADERBOARD_FILE ".leaderboard"
 
+/*
+
+Komórka to char, gdzie najmniej znaczący bit oznacza:
+	1 - bomba
+	0 - pusto
+Drugi najmniej znaczący bit oznacza:
+	1 - jest flaga
+	0 - nie ma flagi
+Trzeci najmniej znaczący bit oznacza:
+	1 - jest odkryta
+	0 - nie jest odkryta
+Czwarty, piąty, szósty bit to informacja o tym ile jest bomb dookoła
+
+*/
+
 typedef struct s_player
 {
 	char	name[MAX_NAME_LEN];
@@ -39,7 +54,7 @@ typedef struct s_player
 
 typedef struct s_game_info
 {
-	char		difficulty;
+	char	difficulty;
 	int		cols;
 	int		rows;
 	int		mines;
@@ -49,6 +64,7 @@ typedef struct s_game_info
 
 // allocation.c:
 
+void		init_info(t_game_info *info);
 void		free_grid(char **grid, int cols);
 char		**create_array(unsigned int cols, unsigned int rows);
 
@@ -68,16 +84,15 @@ bool		bomb_check(char **grid, int r, int c, t_game_info *info);
 void		place_bomb(char **grid, t_game_info *info, int r, int c);
 void		add_count_surround(char **grid, int r, int c, t_game_info *info);
 
-// get_set_type.c
+// get_type.c
 
-void		reveal(char *info);
-void		change_flag(char *info);
-void		set_bomb(char *info);
-void		add_count(char *info);
-void		reveal(char *info);
 bool		is_flagged(char info);
 bool		is_revealed(char info);
 bool		is_bomb(char info);
+
+// leaderboard.c
+
+void		get_leaderboard(t_game_info *info, FILE *input);
 
 // parsing.c
 
@@ -98,5 +113,17 @@ void		print_field(char **grid, int rows, int cols, bool is_finished);
 // reveal.c
 
 int			reveal_grid(char **grid, int r, int c, t_game_info *info);
+
+// set_type.c
+
+void		reveal(char *info);
+void		change_flag(char *info);
+void		set_bomb(char *info);
+void		add_count(char *info);
+
+// start_game.c
+
+void		first_move(FILE *input, char **grid, t_game_info *info);
+bool		start_game(FILE *input, char **grid, t_game_info *info);
 
 #endif /* MINESWEEPER_H */

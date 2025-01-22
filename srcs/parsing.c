@@ -1,50 +1,5 @@
 #include "minesweeper.h"
 
-static int	compare_scores(const void *a, const void *b)
-{
-	return (((t_player *)b)->points - ((t_player *)a)->points);
-}
-
-void	get_leaderboard(t_game_info *info, FILE *input)
-{
-	t_player	players[MAX_PLAYERS];
-	int			player_count;
-	FILE		*file;
-
-	player_count = 0;
-	file = fopen(LEADERBOARD_FILE, "a+");
-	if (!file)
-	{
-		perror("Nie udało się otworzyć pliku z wynikami");
-		return ;
-	}
-	rewind(file);
-	while (fscanf(file, "%127s\t%d", players[player_count].name,
-			&players[player_count].points) == 2)
-	{
-		player_count++;
-		if (player_count >= MAX_PLAYERS)
-			break ;
-	}
-	fclose(file);
-	printf("Podaj imię: ");
-	fgets(players[player_count].name, MAX_NAME_LEN, input);
-	players[player_count].name[strcspn(players[player_count].name, "\n")] = '\0';
-	players[player_count].name[MAX_NAME_LEN - 1] = '\0';
-	players[player_count].points = info->points;
-	player_count++;
-	qsort(players, player_count, sizeof(t_player), compare_scores);
-	printf(COLOR_BOLD "\nWyniki:\n" COLOR_OFF);
-	for (int i = 0; i < player_count && i < 5; i++)
-		printf("%d. %s\t%d\n", i + 1, players[i].name, players[i].points);
-	file = fopen(LEADERBOARD_FILE, "w");
-	if (!file)
-		return perror("Nie udało się otworzyć pliku z wynikami");
-	for (int i = 0; i < player_count; i++)
-		fprintf(file, "%s\t%d\n", players[i].name, players[i].points);
-	fclose(file);
-}
-
 FILE	*get_input(int argc, char **argv)
 {
 	int		option;
