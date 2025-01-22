@@ -46,8 +46,10 @@ bool	start_game(FILE *input, char **grid, t_game_info *info)
 			change_flag(&grid[c][r]);
 		else if (command == 'r' && is_bomb(grid[c][r]))
 			return (false);
-		else if (command == 'r' && !is_flagged(grid[c][r]))
+		else if (command == 'r' && !is_flagged(grid[c][r]) && !is_revealed(grid[c][r]))
 			info->points += reveal_grid(grid, r, c, info) * info->difficulty;
+		else
+			continue ;
 		info->instructions++;
 	}
 	printf("\n");
@@ -84,7 +86,7 @@ void	first_move(FILE *input, char **grid, t_game_info *info)
 			printf("x lub/i y poza granicami mapy\n");
 			continue ;
 		}
-		place_bomb(grid, info, r, c);
+		place_bombs(grid, info, r, c);
 		info->points += reveal_grid(grid, r, c, info) * info->difficulty;
 		info->instructions++;
 	}

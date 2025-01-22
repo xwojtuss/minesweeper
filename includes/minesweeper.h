@@ -81,7 +81,7 @@ void		err_close(char *message, FILE *to_close);
 // generate_map.c
 
 bool		bomb_check(char **grid, int r, int c, t_game_info *info);
-void		place_bomb(char **grid, t_game_info *info, int r, int c);
+void		place_bombs(char **grid, t_game_info *info, int r, int c);
 void		add_count_surround(char **grid, int r, int c, t_game_info *info);
 
 // get_type.c
