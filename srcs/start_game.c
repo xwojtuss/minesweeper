@@ -44,7 +44,7 @@ bool	start_game(FILE *input, char **grid, t_game_info *info)
 		}
 		if (command == 'f' && !is_revealed(grid[c][r]))
 			change_flag(&grid[c][r]);
-		else if (command == 'r' && is_bomb(grid[c][r]))
+		else if (command == 'r' && !is_flagged(grid[c][r]) && is_bomb(grid[c][r]))
 			return (false);
 		else if (command == 'r' && !is_flagged(grid[c][r]) && !is_revealed(grid[c][r]))
 			info->points += reveal_grid(grid, r, c, info) * info->difficulty;
