@@ -1,6 +1,9 @@
-# minesweeper
+# MINESWEEPER
 
 Gra polega na odkryciu wszystkich pól nieposiadających bomb, jednocześnie unikając odkrycia pola posiadającego bombe. Numery na polach oznaczają ile bomb znajduje się wokół danego pola.
+
+![hard](https://github.com/xwojtuss/minesweeper/blob/main/img/hard.png)
+![fail](https://github.com/xwojtuss/minesweeper/blob/main/img/fail.png)
 
 ## Kompilacja i uruchamianie
 
