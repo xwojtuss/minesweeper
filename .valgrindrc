@@ -3,5 +3,4 @@
 --show-reachable=yes
 --show-leak-kinds=all
 --error-limit=no
--s
 --log-file=valgrind.log
