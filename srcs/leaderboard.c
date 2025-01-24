@@ -22,7 +22,7 @@ static bool	get_name(t_player *new, int *player_count, FILE *input,
 
 static void	display_scores(t_player *players, int player_count)
 {
-	qsort(players, player_count, sizeof(t_player), compare_scores);
+	qsort(players, player_count + 1, sizeof(t_player), compare_scores);
 	printf(COLOR_BOLD "\nWyniki:\n" COLOR_OFF);
 	for (int i = 0; i <= player_count && i < 5; i++)
 		printf("%d. %s\t%d\n", i + 1, players[i].name, players[i].points);
