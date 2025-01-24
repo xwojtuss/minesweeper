@@ -24,7 +24,7 @@ static void	display_scores(t_player *players, int player_count)
 {
 	qsort(players, player_count, sizeof(t_player), compare_scores);
 	printf(COLOR_BOLD "\nWyniki:\n" COLOR_OFF);
-	for (int i = 0; i < player_count && i < 5; i++)
+	for (int i = 0; i <= player_count && i < 5; i++)
 		printf("%d. %s\t%d\n", i + 1, players[i].name, players[i].points);
 }
 
@@ -35,7 +35,7 @@ static void	add_player(t_player *players, int player_count)
 	output = fopen(LEADERBOARD_FILE, "w");
 	if (!output)
 		return (perror("Nie udało się otworzyć pliku z wynikami"));
-	for (int i = 0; i < player_count; i++)
+	for (int i = 0; i <= player_count; i++)
 		fprintf(output, "%s\t%d\n", players[i].name, players[i].points);
 	fclose(output);
 }
